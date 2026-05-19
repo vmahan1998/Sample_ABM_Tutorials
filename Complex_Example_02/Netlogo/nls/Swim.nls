@@ -1,0 +1,72 @@
+to swim
+  ;; ==========================================================
+  ;; Fish movement control integrating swimming energy metabolism
+  ;; ==========================================================
+  set previous-patch patch-here
+  set previous-x xcor
+  set previous-y ycor
+  ;; ------------------------------------------
+  ;; LANDWARD MIGRATION (pre-spawning)
+  ;; ------------------------------------------
+  if not fleeing? [
+    set color grey
+  if landward-migration? [
+    calculate-cost-to-home home-patch
+    calculate-difficulty-landward
+    calculate-swimming-speed-landward
+
+    ;; Move upstream if energetic enough
+    if not foraging? [
+      selective-tidal-stream-transport-landward
+    ]
+      set landward-migration-time (landward-migration-time + 1)
+  ]
+
+  ;; ------------------------------------------
+  ;; SEAWARD MIGRATION (post-spawning) OR CRITICAL ENERGY LOW
+  ;; ------------------------------------------
+  if seaward-migration?[
+    calculate-cost-to-sea migration-patch
+    calculate-difficulty-seaward
+    calculate-swimming-speed-seaward
+
+    ;; Migrate only if energetic enough
+    if not foraging? [
+      selective-tidal-stream-transport-seaward ;; swim energy cost is in here
+    ]
+      set landward-migration-time (landward-migration-time + 1)
+  ]
+]
+
+  if fleeing? [
+  ;flee-stripedbass
+    set color red
+]
+  ;; ------------------------------------------
+  ;; UNIVERSAL METABOLIC COST (swimming energy)
+  ;; ------------------------------------------
+  calculate-swim-energy
+
+end
+
+to calculate-swim-energy
+  let beta 0.75 
+    
+  ;; --- Modify energy multiplier by hydrodynamic difficulty and efficiency ---
+  ;; Higher difficulty → higher cost
+  ;; Lower swim-efficiency → higher cost
+  let energy-multiplier (difficulty-factor * (1 / swim-efficiency))
+
+  ;; --- Compute effective swimming energy expenditure ---
+  set E-swim swim-base * (energy-multiplier ^ beta)  ;; exponential scaling for realism
+
+  ;; --- Deduct swimming cost from total energy ---
+  set energy max list 0 (energy - E-swim)  ;; ensures energy doesn’t drop below 0
+
+  ;; --- Optional debugging output ---
+  ;show (word "Swim Energy Cost: " precision swim-Ex 4
+  ;      " | Swim-efficiency: " precision swim-efficiency 3
+  ;      " | Difficulty: " precision difficulty-factor 3
+  ;      " | Base Cost: " precision swim-base 4
+  ;      " | Energy: " precision energy 2)
+end

@@ -1,0 +1,89 @@
+;;; ============================================================
+;;; VariableNames.nls  —  Chapter 16 tutorial
+;;; Subset of the full model's variable declarations.
+;;; Only globals, patch variables, and turtle variables that are
+;;; actually read or written by the functions included in this model.
+;;; ============================================================
+
+globals [
+  max-seaward-velocity    ;; used by calculate-difficulty-landward for normalization
+  max-landward-velocity   ;; used by calculate-difficulty-landward for normalization
+]
+
+patches-own [
+  patch-terrain             ;; "water" or "land"
+  velocity                  ;; along-channel flow (m per tick); positive = landward
+  depth                     ;; water depth (m)
+  cost-to-home              ;; least-cost routing field; reset to 1e6 each tick
+  cost-to-sea               ;; required by routing procedures
+  tidal-transport-in-patch  ;; count of STST drift events recorded in this patch
+  visits-by-alewife         ;; count of agent visits
+  ticks-spent-alewife       ;; ticks agents have spent in this patch
+]
+
+turtles-own [ trail ]   ;; shared across all breeds (from full model)
+
+breed [ alewives prey ]
+
+Alewives-own [
+  ;; Migration state
+  start-migration?
+  landward-migration?
+  seaward-migration?
+  at-destination?
+  completed-action?
+  migration-action
+  migration-destination
+  migration-day
+
+  ;; Destination patches
+  home-patch
+  migration-patch
+  planned-path
+  path-index
+  previous-patch
+  previous-x
+  previous-y
+
+  ;; Timing
+  landward-migration-time
+  seaward-migration-time
+  days-at-large
+  wait-days
+  wait-ticks
+
+  ;; Swimming
+  speed
+  min-speed
+  max-speed
+  prev-speed
+  difficulty-factor
+  swim-efficiency
+  swim-base
+  E-swim
+  energy
+  weight
+  length-size
+  age
+  age-num
+  sex
+
+  ;; Schooling
+  schoolmates
+  nearest-neighbor
+  minimum-separation
+  align-coefficient
+  cohere-coefficient
+  separate-coefficient
+
+  ;; STST state
+  selective-tidal-transport?
+  STST-start-tick
+
+  ;; Required by swim but not central to this tutorial
+  fleeing?
+  foraging?
+  lipid-loss?
+  filter-feed?
+  migration-probability
+]
