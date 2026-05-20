@@ -1,0 +1,11 @@
+to find-schoolmates
+  ;; find other fish of the same breed
+  set schoolmates other turtles with [
+    breed = [breed] of myself and
+    start-migration? and
+    landward-migration? = [landward-migration?] of myself and
+    seaward-migration? = [seaward-migration?] of myself
+    ;; AND optionally within vision radius:
+    ;; distance myself <= alewife-vision
+  ]
+end

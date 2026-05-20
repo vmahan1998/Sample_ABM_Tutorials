@@ -1,0 +1,40 @@
+;;; VariableNames.nls — Chapter 15 tutorial
+;;; Subset of the full model's variable declarations.
+;;; Only the variables actually read or written by the functions
+;;; included in this model (schooling + landward migration).
+
+patches-own [
+  patch-terrain   ;; "water" or "land"
+]
+
+turtles-own [ trail ]   ;; shared across all breeds (matches full model)
+
+breed [ alewives prey ]
+
+Alewives-own [
+  ;; Migration state
+  start-migration?
+  landward-migration?
+  seaward-migration?
+  at-destination?
+
+  ;; Destination patches
+  home-patch
+  migration-patch
+
+  ;; Swimming
+  speed
+  min-speed
+
+  ;; Schooling
+  schoolmates
+  nearest-neighbor
+  minimum-separation
+  align-coefficient
+  cohere-coefficient
+  separate-coefficient
+
+  ;; Not used in this tutorial but required by find-schoolmates
+  ;; (which checks seaward-migration? on schoolmates)
+  ;; — already declared above under migration state
+]

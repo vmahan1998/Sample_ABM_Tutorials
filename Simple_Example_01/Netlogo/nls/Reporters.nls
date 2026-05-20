@@ -1,0 +1,23 @@
+;;; Reporters.nls — Chapter 15 tutorial
+;;; Heading reporters required by Cohere.nls and Align.nls.
+;;; Verbatim from uploaded Reporters.nls (tidal-phase omitted —
+;;; it requires full-model patch variables not present here).
+
+to-report average-schoolmate-heading  ;; prey procedure, borrowed from original flocking model, used for align
+  let x-component sum [dx] of schoolmates
+  let y-component sum [dy] of schoolmates
+  ifelse x-component = 0 and y-component = 0
+    [ report heading ]
+    [ report atan x-component y-component ]
+end
+
+to-report average-heading-towards-schoolmates
+  let schoolmates-list other turtles with [self != myself]   ;; exclude current turtle
+
+  ifelse any? schoolmates-list [
+    let avg-heading mean [heading] of schoolmates-list
+    report avg-heading
+  ] [
+    report 0   ;; default if no schoolmates
+  ]
+end
